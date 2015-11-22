@@ -21,6 +21,14 @@
                 <form action="">
                     <div class="col-xs-12">
                         <div class="input-group">
+                            <span class="input-group-addon">
+                                Set Nickname
+                            </span>
+                            <input type="text" id="nn" class="form-control" placeholder="ニックネーム" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="col-xs-12">
+                        <div class="input-group">
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" type="submit">Send</button>
                             </span>
@@ -41,7 +49,7 @@
         socket.close();
     });
     $('form').submit(function(){
-    socket.emit('chat message', $('#m').val());
+    socket.emit('chat message', { nn: $('#nn').val(), msg: $('#m').val() });
     $('#m').val('');
     return false;
     });
@@ -52,9 +60,10 @@
         var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
         var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
         var ts = localISOTime.substr(2, 8)+' '+localISOTime.substr(11, 8);
+        data.nn = !data.nn ? 'anonymous' : data.nn;
         $('#messages').prepend($('<li class="list-group-item">')
             .html('<div class="row"><div class="col-xs-12 col-md-3">['+ts+'] <strong>'+
-                data.id+'</strong></div> <div class="col-xs-12 col-md-9 text-success">'+
+                data.nn+'</strong></div> <div class="col-xs-12 col-md-9 text-success">'+
                 '<strong>'+data.msg+'</strong></div></div>'));
         });
         </script>
