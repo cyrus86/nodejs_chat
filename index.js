@@ -9,11 +9,12 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
     console.log(socket.conn.id);
     //console.log(socket.client.conn);
-    console.log(socket.conn);
-    io.emit('chat message', 'new user with ID: '+socket.conn.id+ ' | IP: '+ socket.client.conn.remoteAddress)
+    //console.log(socket.conn);
+    io.emit('chat message', {id: '', msg: 'new user connected with ID: '+socket.conn.id+ '</strong> from IP: '+ socket.client.conn.remoteAddress });
     socket.on('chat message', function(msg) {
-        io.emit('chat message', ""+socket.conn.id+": "+msg);
-        io.emit('handshake', socket.handshake);
+        io.emit('chat message', {id: socket.conn.id, msg: msg });
+        //io.emit('handshake', socket.conn);
+        //io.emit('handshake', socket.handshake);
     });
 });
 

@@ -48,14 +48,24 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script>
     var socket = io();
+    $(window).on('beforeunload', function(){
+        socket.close();
+    });
     $('form').submit(function(){
     socket.emit('chat message', $('#m').val());
     $('#m').val('');
     return false;
     });
-    socket.on('chat message', function(msg){
-    $('#messages').prepend($('<li class="list-group-item">').text(msg));
+    socket.on('handshake', function(handshake) {
+        console.log(handshake);
+    });
+    socket.on('chat message', function(data){
+        var ts = new Date().toISOString();
+        ts = ts.substr(2, 8)+' '+ts.substr(11, 8);
+        $('#messages').prepend($('<li class="list-group-item">')
+            .html('<div class="row"><div class="col-xs-12 col-md-3">['+ts+'] <strong>'+data.id+'</strong></div> <div class="col-xs-12 col-md-9 text-success"><strong>'+data.msg+'</strong></div></div>'));
         });
         </script>
     </body>
+
 </html>
