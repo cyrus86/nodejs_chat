@@ -15,16 +15,6 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <style>/*
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font: 13px Helvetica, Arial; }
-        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-        #messages { list-style-type: none; margin: 0; padding: 0; }
-        #messages li { padding: 5px 10px; }
-        #messages li:nth-child(odd) { background: #eee; }*/
-        </style>
     </head>
     <body>
             <nav class="navbar navbar-default">
@@ -39,12 +29,11 @@
                     </div>
                 </form>
             </nav>
-    <div class="container">
+    <div class="container well">
         <ul class="list-group" id="messages"></ul>
     </div>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-    <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     <script>
     var socket = io();
@@ -60,12 +49,14 @@
         console.log(handshake);
     });
     socket.on('chat message', function(data){
-        var ts = new Date().toISOString();
-        ts = ts.substr(2, 8)+' '+ts.substr(11, 8);
+        var tzoffset = (new Date()).getTimezoneOffset() * 60000; //offset in milliseconds
+        var localISOTime = (new Date(Date.now() - tzoffset)).toISOString().slice(0,-1);
+        var ts = localISOTime.substr(2, 8)+' '+localISOTime.substr(11, 8);
         $('#messages').prepend($('<li class="list-group-item">')
-            .html('<div class="row"><div class="col-xs-12 col-md-3">['+ts+'] <strong>'+data.id+'</strong></div> <div class="col-xs-12 col-md-9 text-success"><strong>'+data.msg+'</strong></div></div>'));
+            .html('<div class="row"><div class="col-xs-12 col-md-3">['+ts+'] <strong>'+
+                data.id+'</strong></div> <div class="col-xs-12 col-md-9 text-success">'+
+                '<strong>'+data.msg+'</strong></div></div>'));
         });
         </script>
     </body>
-
 </html>
