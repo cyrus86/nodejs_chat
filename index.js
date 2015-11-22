@@ -8,10 +8,10 @@ app.get('/', function(req, res) {
 
 io.on('connection', function(socket) {
     console.log(socket.conn.id+' '+socket.client.conn.remoteAddress);
-    io.emit('chat message', {id: '', nn: '<strong class="text-warning">system</strong>', msg: 'new user connected with ID: '+socket.conn.id+ ' from IP: '+ socket.client.conn.remoteAddress });
+    io.emit('chat message', {id: '', nickname: '<strong class="text-warning">system</strong>', msg: 'new user connected with ID: '+socket.conn.id+ ' from IP: '+ socket.client.conn.remoteAddress });
     socket.on('chat message', function(data) {
         console.log(data);
-        io.emit('chat message', {id: socket.conn.id, nn: data.nn,  msg: data.msg });
+        io.emit('chat message', {id: socket.conn.id, nickname: data.nickname,  msg: data.msg });
         //io.emit('handshake', socket.handshake);
     });
 });
