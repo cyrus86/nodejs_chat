@@ -5,6 +5,6 @@ Please refer to it to learn how to run this application.
 
 
 ## TODO
-* redis server to save data and users
+* ~~redis server to save data and users~~
 * cookie for user identification? + pw?
 
